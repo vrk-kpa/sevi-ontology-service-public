@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
+        </layout>
+    </appender>
+
+    <logger name="org.apache" level="WARN"/>
+    <logger name="fi.vm.kapa.sevi.service.commons" level="ERROR" />
+    <logger name="org.springframework" level="INFO"/>
+    <logger name="fi.vm" level="DEBUG"/>
+    <logger name="org.hibernate.SQL" level="INFO" />
+    <logger name="com.netflix.discovery.DiscoveryClient" level="WARN"/>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+</configuration>

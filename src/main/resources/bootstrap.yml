@@ -1,0 +1,14 @@
+spring:
+  cloud:
+    config:
+      failFast: false
+      uri: ${config_server_uri:file:not-configured}
+  application:
+    name: sevi-ontology-service
+jenkins:
+  build:
+    number: ${env.BUILD_NUMBER}
+    url: ${env.BUILD_URL}
+    tag: ${env.BUILD_TAG}
+  job.name: ${env.JOB_NAME}
+  node.name: ${env.NODE_NAME}

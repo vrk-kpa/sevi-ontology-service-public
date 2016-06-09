@@ -1,0 +1,62 @@
+---
+
+eureka:
+  client:
+    enabled: false
+
+thread:
+  pool:
+    idle-timeout: 10000
+    max: 50
+    min: 10
+
+spring:
+  profiles: default
+  cloud:
+    config:
+      enabled: false
+      discovery:
+        enabled: false
+
+service:
+  name: sevi-ontology-service
+  database-name: sevi-ontology
+
+server:
+  port: 9089
+  contextPath: /sevi-ontology-service
+application:
+  port: ${server.port}
+  context-path: ${server.contextPath}
+
+session:
+  timeout-mins: 10
+
+ontology:
+  finto:
+    ontology-urls: classpath:skos.rdf,classpath:jupo-skos.ttl,classpath:yso-skos.ttl,classpath:liito-skos.ttl,classpath:juho-skos.ttl,classpath:tero-skos.ttl,classpath:tsr-skos.ttl,classpath:ptvl-skos.ttl
+
+environment:
+  fuseki:
+    host: localhost
+    port: 3535
+
+sevi_commons_cache_redis_host: localhost
+sevi_commons_cache_redis_port: 6380
+sevi_commons_cache_redis_db_index: 2
+
+---
+spring:
+  profiles: dockermachine
+
+environment:
+  fuseki:
+    host: 192.168.99.100
+
+---
+spring:
+  profiles: local
+
+environment:
+  fuseki:
+    host: localhost

@@ -1,0 +1,113 @@
+{
+  "ontology": {
+    "dynamic": "strict",
+    "properties": {
+      "id": {
+        "type": "string",
+        "index": "not_analyzed"
+      },
+      "finnish": {
+        "type": "string"
+      },
+      "swedish": {
+        "type": "string"
+      },
+      "english": {
+        "type": "string"
+      },
+      "label": {
+        "type": "string"
+      },
+      "scheme": {
+        "index": "not_analyzed",
+        "type": "string"
+      },
+      "notation": {
+        "index": "not_analyzed",
+        "type": "string"
+      },
+      "conceptType": {
+        "index": "not_analyzed",
+        "type": "string"
+      },
+      "index_time": {
+        "type": "long"
+      }
+    }
+  },
+  "ontology_toplevel": {
+    "dynamic": "strict",
+    "properties": {
+      "id": {
+        "type": "string",
+        "index": "not_analyzed"
+      },
+      "finnish": {
+        "type": "string"
+      },
+      "swedish": {
+        "type": "string"
+      },
+      "english": {
+        "type": "string"
+      },
+      "label": {
+        "type": "string"
+      },
+      "scheme": {
+        "index": "not_analyzed",
+        "type": "string"
+      },
+      "notation": {
+        "index": "not_analyzed",
+        "type": "string"
+      },
+      "conceptType": {
+        "index": "not_analyzed",
+        "type": "string"
+      },
+      "index_time": {
+        "type": "long"
+      }
+    }
+  },
+  "ontology_view": {
+    "dynamic": "strict",
+    "properties": {
+      "id": {
+        "type": "string",
+        "index": "not_analyzed"
+      },
+      "finnish": {
+        "type": "string"
+      },
+      "swedish": {
+        "type": "string"
+      },
+      "english": {
+        "type": "string"
+      },
+      "label": {
+        "type": "string"
+      },
+      "scheme": {
+        "index": "not_analyzed",
+        "type": "string"
+      },
+      "notation": {
+        "index": "not_analyzed",
+        "type": "string"
+      },
+      "conceptType": {
+        "index": "not_analyzed",
+        "type": "string"
+      },
+      "index_time": {
+        "type": "long"
+      },
+      "children": {
+        "type": "nested"
+      }
+    }
+  }
+}
