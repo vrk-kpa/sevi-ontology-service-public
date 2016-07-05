@@ -51,7 +51,7 @@ When the microservice is running, you can get the Swagger REST API documentation
 ### Building
 - Java 8+
 - Maven 3.3+
-- Docker 
+- Docker
 
 ### Running
 - [sevi-config-public](https://github.com/vrk-kpa/sevi-config-public) - Default configuration for development use
@@ -76,7 +76,7 @@ $ mvn clean package docker:build
 $ docker run -p 9089:9089 -p 19089:19089 -v /path/to/sevi-config-public:/config --name sevi-ontology-service sevi-ontology-service -a --spring.config.location=/config/application.yml,/config/sevi-ontology-service.yml
 ```
 
-.. or in [sevi-compose-public](https://github.com/vrk-kpa/sevi-compose-public) run 
+.. or in [sevi-docker-compose-public](https://github.com/vrk-kpa/sevi-docker-compose-public) run
 
 ```bash
 $ docker-compose up ontologyservice
