@@ -120,6 +120,15 @@ public class OntologyMaintenanceResource {
     }
 
     @PUT
+    @Path("/evict")
+    @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "Evicts all caches", response = Void.class)
+    public void evictCache() {
+        LOGGER.debug("Cache eviction requested.");
+        ontologyService.evictCaches();
+    }
+
+    @PUT
     @Path("/import/all")
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Fetches all the ontologies, stores them to Fuseki and indexes them to Elasticsearch",

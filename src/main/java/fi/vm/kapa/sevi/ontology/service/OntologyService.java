@@ -23,7 +23,6 @@
 package fi.vm.kapa.sevi.ontology.service;
 
 import fi.vm.kapa.sevi.ontology.dto.ConceptDTO;
-import fi.vm.kapa.sevi.service.commons.ConceptType;
 import fi.vm.kapa.sevi.ontology.dto.ViewDTO;
 import fi.vm.kapa.sevi.ontology.exception.ConceptNotFoundException;
 import fi.vm.kapa.sevi.ontology.exception.OntologyServerException;
@@ -36,6 +35,7 @@ import fi.vm.kapa.sevi.ontology.jena.vocabulary.LifesituationParser;
 import fi.vm.kapa.sevi.ontology.jena.vocabulary.PtvlClassificationParser;
 import fi.vm.kapa.sevi.ontology.jena.vocabulary.TargetGroupParser;
 import fi.vm.kapa.sevi.ontology.service.indexing.IndexingService;
+import fi.vm.kapa.sevi.service.commons.ConceptType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,8 +60,7 @@ public class OntologyService {
     // TODO: move cache and update state from service to Redis. PAL-1917
     protected static final AtomicBoolean updateOngoing = new AtomicBoolean(false);
 
-    // Public for tests.
-    public static final ExecutorService executor = Executors.newFixedThreadPool(1);
+    private ExecutorService executor = Executors.newFixedThreadPool(1);
 
     @Autowired
     private AllConceptParser allConceptParser;
@@ -288,6 +287,7 @@ public class OntologyService {
             "getConcept","getConceptsByLabel","findBroaderConcepts","findNarrowerConcepts"}, allEntries=true)
     public void evictCaches() {
         // This method is intentionally empty. It evicts the caches through annotated aspects.
+        LOGGER.info("Evicting caches.");
     }
     
     public boolean isUpdateOngoing() {
@@ -339,4 +339,8 @@ public class OntologyService {
                 .map(JenaConceptParser::getConcepts).flatMap(c -> c);
     }
 
+    // Used in tests to set synchronous executor
+    public void setExecutor(ExecutorService executor) {
+        this.executor = executor;
+    }
 }

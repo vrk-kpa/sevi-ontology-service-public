@@ -1,17 +1,17 @@
 /**
  * The MIT License
  * Copyright (c) 2015 Population Register Centre
- *
+ * <p>
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- *
+ * <p>
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- *
+ * <p>
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,10 +22,11 @@
  */
 package fi.vm.kapa.sevi.ontology.resource;
 
+import com.google.common.util.concurrent.MoreExecutors;
 import fi.vm.kapa.sevi.Application;
 import fi.vm.kapa.sevi.ontology.dto.ConceptDTO;
-import fi.vm.kapa.sevi.service.commons.ConceptType;
 import fi.vm.kapa.sevi.ontology.service.OntologyService;
+import fi.vm.kapa.sevi.service.commons.ConceptType;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -44,14 +45,12 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
-@WebIntegrationTest({ "server.port=0", "management.port=0" })
+@WebIntegrationTest({"server.port=0", "management.port=0"})
 public class OntologyResourceIT {
 
     private static final String PARAM_URI = "uri";
@@ -73,11 +72,11 @@ public class OntologyResourceIT {
 
     @Before
     public void before() throws InterruptedException {
-        baseUri = "http://"+ ontologyServiceHost +":" + ontologyServicePort + SERVICE_BASE;
+        baseUri = "http://" + ontologyServiceHost + ":" + ontologyServicePort + SERVICE_BASE;
         service.evictCaches();
-        if (!initialized){
+        if (!initialized) {
+            service.setExecutor(MoreExecutors.newDirectExecutorService());
             service.fetchConcepts();
-            service.executor.awaitTermination(100, TimeUnit.SECONDS);
             initialized = true;
         }
     }
@@ -85,7 +84,7 @@ public class OntologyResourceIT {
     // UTILS ---------------
 
     private ConceptDTO findConceptByUri(String conceptUri) {
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(baseUri +"concept").queryParam(PARAM_URI, conceptUri);
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(baseUri + "concept").queryParam(PARAM_URI, conceptUri);
         final URI uri = builder.build().encode().toUri();
         return new RestTemplate().getForObject(uri, ConceptDTO.class);
     }
@@ -101,12 +100,12 @@ public class OntologyResourceIT {
     private List<ConceptDTO> findConcepts(URI uri, ConceptType conceptType, int conceptCount) throws URISyntaxException {
         final ConceptDTO[] ontologies = new RestTemplate().getForObject(uri, ConceptDTO[].class);
         final List<ConceptDTO> jenaOntologyDTOs = Arrays.asList(ontologies);
-        assertEquals("There should be "+ conceptCount +" "+ conceptType.toString() +" concepts from "+ uri.toString(), conceptCount, jenaOntologyDTOs.size());
+        assertEquals("There should be " + conceptCount + " " + conceptType.toString() + " concepts from " + uri.toString(), conceptCount, jenaOntologyDTOs.size());
         jenaOntologyDTOs.forEach(dto -> {
             assertNotNull(dto.getLabel());
             assertNotNull(dto.getId());
             assertNotNull(dto.getNotation());
-            assertEquals("Concept type should match "+ conceptType, conceptType, dto.getConceptType());
+            assertEquals("Concept type should match " + conceptType, conceptType, dto.getConceptType());
         });
         return jenaOntologyDTOs;
     }
@@ -120,14 +119,14 @@ public class OntologyResourceIT {
         @SuppressWarnings("unchecked")
         List<ConceptType> types = (List<ConceptType>) restTemplate.getForObject(uri, List.class);
         assertEquals("the number of ontology types should match", types.size(), ConceptType.values().length);
-        assertTrue("should include "+ ConceptType.JUPO +" type", types.contains(ConceptType.JUPO.toString()));
-        assertTrue("should include "+ ConceptType.TERO +" type", types.contains(ConceptType.TERO.toString()));
-        assertTrue("should include "+ ConceptType.TSR +" type", types.contains(ConceptType.TSR.toString()));
-        assertTrue("should include "+ ConceptType.YSO +" type", types.contains(ConceptType.YSO.toString()));
-        assertTrue("should include "+ ConceptType.LIITO +" type", types.contains(ConceptType.LIITO.toString()));
-        assertTrue("should include "+ ConceptType.TARGETGROUP +" type", types.contains(ConceptType.TARGETGROUP.toString()));
-        assertTrue("should include "+ ConceptType.LIFESITUATION +" type", types.contains(ConceptType.LIFESITUATION.toString()));
-        assertTrue("should include "+ ConceptType.PTVL +" type", types.contains(ConceptType.PTVL.toString()));
+        assertTrue("should include " + ConceptType.JUPO + " type", types.contains(ConceptType.JUPO.toString()));
+        assertTrue("should include " + ConceptType.TERO + " type", types.contains(ConceptType.TERO.toString()));
+        assertTrue("should include " + ConceptType.TSR + " type", types.contains(ConceptType.TSR.toString()));
+        assertTrue("should include " + ConceptType.YSO + " type", types.contains(ConceptType.YSO.toString()));
+        assertTrue("should include " + ConceptType.LIITO + " type", types.contains(ConceptType.LIITO.toString()));
+        assertTrue("should include " + ConceptType.TARGETGROUP + " type", types.contains(ConceptType.TARGETGROUP.toString()));
+        assertTrue("should include " + ConceptType.LIFESITUATION + " type", types.contains(ConceptType.LIFESITUATION.toString()));
+        assertTrue("should include " + ConceptType.PTVL + " type", types.contains(ConceptType.PTVL.toString()));
     }
 
     @Test
@@ -163,7 +162,7 @@ public class OntologyResourceIT {
     public void testFindPtvlConceptByUri() {
         final String originalUri = "http://urn.fi/URN:NBN:fi:au:ptvl:KE4.1";
         final ConceptDTO ontology = findConceptByUri(originalUri);
-        assertEquals(originalUri +" should be found", originalUri, ontology.getId());
+        assertEquals(originalUri + " should be found", originalUri, ontology.getId());
     }
 
     @Test
@@ -188,14 +187,14 @@ public class OntologyResourceIT {
 
     @Test
     public void testGetPtvlClassifications() throws URISyntaxException {
-        final URI uri = new URI(baseUri + "concepts/"+ ConceptType.PTVL);
+        final URI uri = new URI(baseUri + "concepts/" + ConceptType.PTVL);
         final int conceptCount = 221;
         findConcepts(uri, ConceptType.PTVL, conceptCount);
     }
 
     @Test
     public void testGetPtvlServiceClassificationTopLevels() throws URISyntaxException {
-        final URI uri = new URI(baseUri + "concepts/"+ ConceptType.PTVL +"/toplevel");
+        final URI uri = new URI(baseUri + "concepts/" + ConceptType.PTVL + "/toplevel");
         // See this: http://finto.fi/ptvl/fi/page/?uri=http://urn.fi/URN:NBN:fi:au:ptvl:
         // There are 27 top level classifications for the service classes.
         final int conceptCount = 27;
@@ -226,7 +225,7 @@ public class OntologyResourceIT {
     public void testFindJupoConceptByUri() {
         final String originalUri = "http://www.yso.fi/onto/jupo/p1162";
         final ConceptDTO ontology = findConceptByUri(originalUri);
-        assertEquals(originalUri +" should be found", originalUri, ontology.getId());
+        assertEquals(originalUri + " should be found", originalUri, ontology.getId());
     }
 
     @Test
@@ -251,14 +250,14 @@ public class OntologyResourceIT {
 
     @Test
     public void testGetJupoConcepts() throws URISyntaxException {
-        final URI uri = new URI(baseUri + "concepts/"+ ConceptType.JUPO);
+        final URI uri = new URI(baseUri + "concepts/" + ConceptType.JUPO);
         final int conceptCount = 25964;
         findConcepts(uri, ConceptType.JUPO, conceptCount);
     }
 
     @Test
     public void testGetJupoToplevelConcepts() throws URISyntaxException {
-        final URI uri = new URI(baseUri + "concepts/"+ ConceptType.JUPO +"/toplevel");
+        final URI uri = new URI(baseUri + "concepts/" + ConceptType.JUPO + "/toplevel");
         final int conceptCount = 23;
         findConcepts(uri, ConceptType.JUPO, conceptCount);
     }

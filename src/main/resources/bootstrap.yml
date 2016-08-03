@@ -1,4 +1,5 @@
 spring:
+# about @ notation see: https://github.com/vrk-kpa/sevi-example-java-service/commit/f1e1437f851136e7a949e2861c1f5a2c2653af78
   cloud:
     config:
       failFast: false
@@ -7,8 +8,8 @@ spring:
     name: sevi-ontology-service
 jenkins:
   build:
-    number: ${env.BUILD_NUMBER}
-    url: ${env.BUILD_URL}
-    tag: ${env.BUILD_TAG}
-  job.name: ${env.JOB_NAME}
-  node.name: ${env.NODE_NAME}
+    number: '@env.BUILD_NUMBER@'
+    url: '@env.BUILD_URL@'
+    tag: '@env.BUILD_TAG@'
+  job.name: '@env.JOB_NAME@'
+  node.name: '@env.NODE_NAME@'

@@ -23,7 +23,6 @@
 package fi.vm.kapa.sevi.ontology.service;
 
 import fi.vm.kapa.sevi.ontology.dto.ConceptDTO;
-import fi.vm.kapa.sevi.service.commons.ConceptType;
 import fi.vm.kapa.sevi.ontology.exception.ConceptNotFoundException;
 import fi.vm.kapa.sevi.ontology.jena.AllConceptParser;
 import fi.vm.kapa.sevi.ontology.jena.JenaConceptParser;
@@ -33,6 +32,8 @@ import fi.vm.kapa.sevi.ontology.jena.vocabulary.LifesituationParser;
 import fi.vm.kapa.sevi.ontology.jena.vocabulary.PtvlClassificationParser;
 import fi.vm.kapa.sevi.ontology.jena.vocabulary.TargetGroupParser;
 import fi.vm.kapa.sevi.ontology.service.indexing.IndexingService;
+import fi.vm.kapa.sevi.service.commons.ConceptType;
+import org.apache.jena.ext.com.google.common.util.concurrent.MoreExecutors;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,7 +47,6 @@ import org.mockito.stubbing.Answer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.StreamSupport;
 
 import static org.junit.Assert.assertEquals;
@@ -74,13 +74,13 @@ public class OntologyServiceTest {
 
     @Mock
     private IndexingService indexingService;
-    
+
     @Mock
     private JenaOntologyFetcher jenaOntologyFetcher;
 
     @InjectMocks
     private OntologyService ontologyService;
-    
+
     private ConceptDTO first;
     private ConceptDTO second;
     private List<ConceptDTO> concepts;
@@ -115,8 +115,9 @@ public class OntologyServiceTest {
             public List<JenaConceptParser> answer(InvocationOnMock invocation) throws Throwable {
                 return getParsers();
             }
-            
+
         }).when(ontologyService).getParsers();
+        ontologyService.setExecutor(MoreExecutors.newDirectExecutorService());
         ontologyService.evictCaches();
     }
 
@@ -232,7 +233,6 @@ public class OntologyServiceTest {
         doNothing().when(jenaOntologyFetcher).deleteFusekiTDBDataset();
         setupGetConceptType();
         assertTrue(ontologyService.deleteOntologies());
-        ontologyService.executor.awaitTermination(100, TimeUnit.SECONDS);
         verify(jenaOntologyFetcher).deleteFusekiTDBDataset();
     }
 
