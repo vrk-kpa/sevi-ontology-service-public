@@ -37,7 +37,7 @@ public class SparqlQueryBuilder {
 
 
     public static String variable(String s) {
-        return "?"+s;
+        return "?" + s;
     }
 
     public static String urify(String s) {
